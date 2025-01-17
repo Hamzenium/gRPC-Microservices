@@ -1,14 +1,32 @@
+# Version specifies the Docker Compose file format version. Version 3 is commonly used for deploying to Docker Swarm.
 version: '3'
 
+# Define the services that will be part of this Docker Compose application.
 services:
 
+  # The 'broker-service' is the name of the service that will run our broker application.
   broker-service:
+    # The 'build' section defines the context and Dockerfile for building the Docker image.
     build:
+      # 'context' specifies the build context, which is the directory where the Dockerfile is located.
+      # In this case, it refers to the 'broker-service' directory relative to the current location.
       context: ./../broker-service
+      # 'dockerfile' specifies the relative path to the Dockerfile that will be used to build the image.
       dockerfile: ./../broker-service/broker-service.dockerfile
+    
+    # Define restart behavior. 'always' ensures the container is restarted if it stops or crashes.
     restart: always
+    
+    # Define port mappings. This maps port 8080 on the host to port 80 in the container.
+    # The application inside the container listens on port 80, while port 8080 is exposed to the host.
     ports:
       - "8080:80"
+    
+    # The 'deploy' section specifies the deployment settings when using Docker Swarm.
     deploy:
+      # 'mode: replicated' means that the service will be replicated across multiple nodes.
+      # For now, it is set to a single replica.
       mode: replicated
+      # 'replicas: 1' specifies the number of instances of the service to run.
+      # This can be scaled up to more replicas if needed.
       replicas: 1
